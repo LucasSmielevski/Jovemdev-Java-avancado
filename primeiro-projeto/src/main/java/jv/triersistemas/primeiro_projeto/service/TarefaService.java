@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jv.triersistemas.primeiro_projeto.dto.TarefaDto;
+import jv.triersistemas.primeiro_projeto.entity.TarefaEntity;
 
 public interface TarefaService {
 	
@@ -18,5 +19,5 @@ public interface TarefaService {
 	
 	TarefaDto atualizarTarefa( Long id, TarefaDto tarefaAtualizada);
 	
-	boolean removerTarefa(@RequestParam Long id); 
+	void removerTarefa(@RequestParam Long id); 
 }
