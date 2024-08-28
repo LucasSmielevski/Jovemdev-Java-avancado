@@ -1,10 +1,12 @@
 package jv.triersistemas.primeiro_projeto.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import jv.triersistemas.primeiro_projeto.Tarefa;
 
-import java.util.ArrayList;
+import jv.triersistemas.primeiro_projeto.dto.TarefaDto;
+import jv.triersistemas.primeiro_projeto.service.TarefaService;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -12,39 +14,32 @@ import java.util.Optional;
 @RequestMapping("/tarefa")
 public class TarefaController {
 
-    private static List<Tarefa> tarefas = new ArrayList<>();
-    private static long contadorId = 1;
-
+	@Autowired
+	private TarefaService tarefaService;
 
     @GetMapping
-    public List<Tarefa> getTodasTarefas() {
-        return tarefas;
+    public List<TarefaDto> getTodasTarefas() {
+        return tarefaService.getTodasTarefas();
     }
 
     @GetMapping("/{id}")
-    public Tarefa getTarefaPorId(@RequestParam Long id) {
-        Optional<Tarefa> tarefa = tarefas.stream().filter(t -> t.getId().equals(id)).findFirst();
+    public TarefaDto getTarefaPorId(@PathVariable Long id) {
+        Optional<TarefaDto> tarefa = tarefaService.getTarefaPorId(id);
         return tarefa.orElse(null);
     }
 
     @PostMapping
-    public void adicionarTarefa(@RequestBody Tarefa novaTarefa) {
-        novaTarefa.setId(contadorId++);
-        tarefas.add(novaTarefa);
+    public TarefaDto adicionarTarefa(@RequestBody TarefaDto novaTarefa) {
+    	return tarefaService.adicionarTarefa(novaTarefa);
     }
 
     @PutMapping("/{id}")
-    public void atualizarTarefa(@RequestParam Long id, @RequestBody Tarefa tarefaAtualizada) {
-        Tarefa tarefa = getTarefaPorId(id);
-        if (tarefa != null) {
-            tarefa.setTitulo(tarefaAtualizada.getTitulo());
-            tarefa.setDescricao(tarefaAtualizada.getDescricao());
-            tarefa.setCompleta(tarefaAtualizada.isCompleta());
-        }
+    public TarefaDto atualizarTarefa(@PathVariable Long id, @RequestBody TarefaDto tarefaAtualizada) {
+    	return tarefaService.atualizarTarefa(id, tarefaAtualizada);
     }
 
     @DeleteMapping("/{id}")
-    public boolean removerTarefa(@RequestParam Long id) {
-        return tarefas.removeIf(t -> t.getId().equals(id));
+    public boolean removerTarefa(@PathVariable Long id) {
+    	return tarefaService.removerTarefa(id);
     }
 }
