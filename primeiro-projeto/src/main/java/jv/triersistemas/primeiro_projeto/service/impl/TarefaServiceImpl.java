@@ -3,6 +3,7 @@ package jv.triersistemas.primeiro_projeto.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,11 @@ public class TarefaServiceImpl implements TarefaService {
 	@Autowired
 	private TarefaRepository repository;
 
-//    private static List<TarefaDto> listatarefas = new ArrayList<>();
 
 	@Override
 	public List<TarefaDto> getTodasTarefas() {
 		List<TarefaEntity> entidadeAll = repository.findAll();
+		return entidadeAll.stream().map(this::convertParaDto).collect(Collectors.toList());
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class TarefaServiceImpl implements TarefaService {
 			tarefa.get().setTitulo(tarefaAtualizada.getTitulo());
 			tarefa.get().setDescricao(tarefaAtualizada.getDescricao());
 			tarefa.get().setCompleta(tarefaAtualizada.getCompleta());
-			TarefaEntity entidadeAtualizada = repository.save(tarefa);
+			TarefaEntity entidadeAtualizada = repository.save(tarefa.get());
 			return new TarefaDto(entidadeAtualizada);
 		}
 		return null;
