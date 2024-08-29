@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jv.triersistemas.primeiro_projeto.dto.CategoriaDto;
 import jv.triersistemas.primeiro_projeto.dto.TarefaDto;
 import jv.triersistemas.primeiro_projeto.entity.TarefaEntity;
 
@@ -15,7 +16,7 @@ public interface TarefaService {
 	
 	Optional<TarefaDto> getTarefaPorId(@RequestParam Long id);
 	
-	TarefaDto adicionarTarefa(@RequestBody TarefaDto novaTarefa);
+	TarefaDto adicionarTarefa(@RequestBody TarefaDto novaTarefa, CategoriaDto categoriaDto);
 	
 	TarefaDto atualizarTarefa( Long id, TarefaDto tarefaAtualizada);
 	

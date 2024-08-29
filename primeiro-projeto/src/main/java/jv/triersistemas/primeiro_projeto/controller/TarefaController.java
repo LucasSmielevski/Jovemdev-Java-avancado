@@ -3,6 +3,7 @@ package jv.triersistemas.primeiro_projeto.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import jv.triersistemas.primeiro_projeto.dto.CategoriaDto;
 import jv.triersistemas.primeiro_projeto.dto.TarefaDto;
 import jv.triersistemas.primeiro_projeto.entity.TarefaEntity;
 import jv.triersistemas.primeiro_projeto.service.TarefaService;
@@ -18,7 +19,7 @@ public class TarefaController {
 	private TarefaService tarefaService;
 
 	@GetMapping
-	public List<TarefaEntity> getTodasTarefas() {
+	public List<TarefaDto> getTodasTarefas() {
 		return tarefaService.getTodasTarefas();
 	}
 
@@ -29,8 +30,8 @@ public class TarefaController {
 	}
 
 	@PostMapping
-	public TarefaDto adicionarTarefa(@RequestBody TarefaDto novaTarefa) {
-		return tarefaService.adicionarTarefa(novaTarefa);
+	public TarefaDto adicionarTarefa(@RequestBody TarefaDto novaTarefa, CategoriaDto categoriaDto) {
+		return tarefaService.adicionarTarefa(novaTarefa, categoriaDto);
 	}
 
 	@PutMapping("/{id}")
@@ -38,8 +39,8 @@ public class TarefaController {
 		return tarefaService.atualizarTarefa(id, tarefaAtualizada);
 	}
 
-	@DeleteMapping("/{id}")
-	public void removerTarefa(@PathVariable Long id) {
+	@DeleteMapping
+	public void removerTarefa(@RequestParam Long id) {
 		tarefaService.removerTarefa(id);
 	}
 }

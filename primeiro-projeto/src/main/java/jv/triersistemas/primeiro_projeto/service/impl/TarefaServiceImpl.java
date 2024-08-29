@@ -1,17 +1,16 @@
 package jv.triersistemas.primeiro_projeto.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.datatype.jdk8.OptionalDoubleSerializer;
-
+import jv.triersistemas.primeiro_projeto.dto.CategoriaDto;
 import jv.triersistemas.primeiro_projeto.dto.TarefaDto;
+import jv.triersistemas.primeiro_projeto.entity.CategoriaEntity;
 import jv.triersistemas.primeiro_projeto.entity.TarefaEntity;
+import jv.triersistemas.primeiro_projeto.repository.CategoriaRepository;
 import jv.triersistemas.primeiro_projeto.repository.TarefaRepository;
 import jv.triersistemas.primeiro_projeto.service.TarefaService;
 
@@ -20,12 +19,15 @@ public class TarefaServiceImpl implements TarefaService {
 
 	@Autowired
 	private TarefaRepository repository;
+	
+	@Autowired
+	private CategoriaServiceImpl categoriaServiceImpl;
 
 
 	@Override
 	public List<TarefaDto> getTodasTarefas() {
 		List<TarefaEntity> entidadeAll = repository.findAll();
-		return entidadeAll.stream().map(this::convertParaDto).collect(Collectors.toList());
+		return entidadeAll.stream().map(this::convertParaDto).toList();
 	}
 
 	@Override
@@ -35,8 +37,13 @@ public class TarefaServiceImpl implements TarefaService {
 	}
 
 	@Override
-	public TarefaDto adicionarTarefa(TarefaDto novaTarefa) {
-		TarefaEntity entidadePersistida = repository.save(new TarefaEntity(novaTarefa));
+	public TarefaDto adicionarTarefa(TarefaDto novaTarefa, CategoriaDto categoria) {
+		Optional<CategoriaDto> categoriaEntidade = categoriaServiceImpl.getCategoriaPorId(categoria.getId());
+		CategoriaDto categoriaDto = categoriaEntidade.get();
+		
+		TarefaEntity entidadePersistida = new TarefaEntity(novaTarefa);
+		entidadePersistida.setCategoria(categoriaDto);
+		repository.save(new TarefaEntity(novaTarefa));
 		return new TarefaDto(entidadePersistida);
 	}
 
@@ -47,6 +54,7 @@ public class TarefaServiceImpl implements TarefaService {
 			tarefa.get().setTitulo(tarefaAtualizada.getTitulo());
 			tarefa.get().setDescricao(tarefaAtualizada.getDescricao());
 			tarefa.get().setCompleta(tarefaAtualizada.getCompleta());
+			tarefa.get().setCategoria(tarefaAtualizada.getCategoria());
 			TarefaEntity entidadeAtualizada = repository.save(tarefa.get());
 			return new TarefaDto(entidadeAtualizada);
 		}
