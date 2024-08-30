@@ -10,6 +10,9 @@ import jv.triersistemas.primeiro_projeto.entity.TarefaEntity;
 @Repository
 public interface TarefaRepository  extends JpaRepository<TarefaEntity, Long>{
 	List<TarefaEntity> findAllByCategoriaNome(String nome);
+
+	List<TarefaEntity> findAllByTituloContainingIgnoreCase(String titulo);
+
 	
-	List<TarefaEntity> findAllByTituloAndCompletaOrderByIdAsc(String titulo, boolean completa );
+    List<TarefaEntity> findByCategoria_IdAndCompletaFalse(int categoriaId);
 }

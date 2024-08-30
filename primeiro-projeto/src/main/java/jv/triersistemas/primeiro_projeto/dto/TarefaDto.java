@@ -1,5 +1,9 @@
 package jv.triersistemas.primeiro_projeto.dto;
 
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jv.triersistemas.primeiro_projeto.entity.CategoriaEntity;
 import jv.triersistemas.primeiro_projeto.entity.TarefaEntity;
 import lombok.AllArgsConstructor;
@@ -14,13 +18,19 @@ public class TarefaDto {
 	private String titulo;
 	private String descricao;
 	private Boolean completa;
-	private CategoriaEntity categoria;
+	private int idCategoria;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate dataCriacao;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate dataExpiracao;
 	
 	public TarefaDto(TarefaEntity entity) {
 		this.id = entity.getId();
 		this.titulo = entity.getTitulo();
 		this.descricao = entity.getDescricao();
 		this.completa = entity.getCompleta();
-		this.categoria = entity.getCategoria();
+		this.idCategoria = entity.getCategoria().getId();
+		this.dataCriacao = entity.getDataCriacao();
+		this.dataExpiracao = entity.getDataExpiracao();
 	}
 }

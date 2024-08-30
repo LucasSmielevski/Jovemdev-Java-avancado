@@ -1,5 +1,10 @@
 package jv.triersistemas.primeiro_projeto.entity;
 
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,9 +31,14 @@ public class TarefaEntity {
 	private String titulo;
 	private String descricao;
 	private Boolean completa;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate dataCriacao;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate dataExpiracao;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "categoria_id", nullable = false)
+    @JsonIgnore
 	private CategoriaEntity categoria;
 	
 	public TarefaEntity(TarefaDto dto) {
@@ -36,5 +46,7 @@ public class TarefaEntity {
 		this.titulo = dto.getTitulo();
 		this.descricao = dto.getDescricao();
 		this.completa = dto.getCompleta();
+		this.dataCriacao = dto.getDataCriacao();
+		this.dataExpiracao = dto.getDataExpiracao();
 	}
 }
